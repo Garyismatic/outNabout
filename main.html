@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CSS/main.css" />
     <title>Out-N-About</title>
-</head>
-<body>
-    <section id="header"></section>
-    <section id="user-input"></section>
-    <section id="results"></section>
-    <section id="map-view"></section>
-    <section id="footer"></section>
-</body>
+  </head>
+  <body>
+    <section id="app-container">
+      <section id="header">
+        <h1>outNabout</h1>
+      </section>
+      <section id="user-input">
+        <label for="destination">Destination</label><br />
+        <input type="text" id="destination" name="destination" />
+        <button type="button">Search</button>
+      </section>
+      <section id="results">
+        <section id="weather-info">
+          <h3>Weather</h3>
+          <p>Temperature: <span id="temp">20deg</span></p>
+          <p>Conditions: <span id="weather-condition">Sunny!</span></p>
+        </section>
+        <section id="travel-info">
+          <h3>Travel</h3>
+          <p>Time to Destination: <span id="travel-time">1:30</span></p>
+          <p>Distance: <span id="distance">75 miles</span></p>
+          <p>Traffic: <span id="traffic">Moderate</span></p>
+        </section>
+      </section>
+      <section id="map-container">
+        <h3>Map</h3>
+      </section>
+      <section id="footer">
+        <h5>Created by <span id="my-name">Gary Evans</span></h5>
+      </section>
+    </section>
+  </body>
 </html>
