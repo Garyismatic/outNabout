@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="CSS/main.css" />
+    <script src="script.js" defer></script>
     <title>Out-N-About</title>
   </head>
   <body>
@@ -13,8 +14,14 @@
       </section>
       <section id="user-input">
         <label for="destination">Destination</label><br />
-        <input type="text" id="destination" name="destination" />
-        <button type="button">Search</button>
+        <input
+          type="text"
+          id="destination"
+          name="destination"
+          placeholder="postcode / city"
+          value="SS4"
+        />
+        <button type="button" id="search-button">Search</button>
       </section>
       <section id="results">
         <section id="weather-info">

@@ -1,16 +1,16 @@
-body{
-    margin: 0;
-    padding: 0;
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
-#app-container{
-   border: solid 10px grey;
-   padding: 30px;
-   margin: 10px;
-   max-width: 100vw;
+#app-container {
+  border: solid 10px grey;
+  padding: 30px;
+  margin: 10px;
+  max-width: 100vw;
 }
