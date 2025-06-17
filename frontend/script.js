@@ -40,13 +40,18 @@ const handleSearch = (e) => {
       return res.json();
     })
     .then((coordinates) => {
+      console.log(coordinates);
       const result = coordinates.results[0];
-      const city = result.admin3 || "";
       const county = result.admin2;
+      const city = result.name;
       const { latitude, longitude } = coordinates.results[0];
       const start = "0.7909,51.5355";
 
-      document.getElementById("city").innerHTML = city + " " + county;
+      if (city !== county) {
+        document.getElementById("city").innerHTML = city + " " + county;
+      } else {
+        document.getElementById("city").innerHTML = city;
+      }
 
       const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
       const routeURL = `/api/route?start=${start}&end=${longitude},${latitude}`;
@@ -68,9 +73,12 @@ const handleSearch = (e) => {
 
       hours = Math.floor(routingFeatures.summary.duration / 3600);
       minutes = Math.floor((routingFeatures.summary.duration % 3600) / 60);
-      distance = (routingFeatures.summary.distance * 0.000621371).toFixed(2);
+      distance =
+        (routingFeatures.summary.distance / 1609.344).toFixed(1) + " Miles";
 
-      document.getElementById("travel-time").innerHTML = `${hours}hr ${minutes}min`;
+      document.getElementById(
+        "travel-time"
+      ).innerHTML = `${hours}hr ${minutes}min`;
       document.getElementById("distance").innerHTML = distance;
 
       console.log(parsedRoute);
