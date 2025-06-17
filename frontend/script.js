@@ -40,32 +40,40 @@ const handleSearch = (e) => {
       return res.json();
     })
     .then((coordinates) => {
-      const city = coordinates.results[0].admin3
-        ? coordinates.results[0].admin3
-        : "";
-
-      const county = coordinates.results[0].admin2;
+      const result = coordinates.results[0];
+      const city = result.admin3 || "";
+      const county = result.admin2;
       const { latitude, longitude } = coordinates.results[0];
+      const start = "0.7909,51.5355";
 
       document.getElementById("city").innerHTML = city + " " + county;
 
-      return { latitude, longitude };
+      const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+      const routeURL = `/api/route?start=${start}&end=${longitude},${latitude}`;
+
+      return Promise.all([fetch(weatherURL), fetch(routeURL)]);
     })
-    .then(({ latitude, longitude }) => {
-      return fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-      );
+    .then(([weather, route]) => {
+      return Promise.all([weather.json(), route.json()]);
     })
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data);
-      temp = data.current_weather.temperature;
-      weather = weatherCode[data.current_weather.weathercode];
-      tempUnits = data.current_weather_units.temperature;
+    .then(([parsedWeather, parsedRoute]) => {
+      const routingFeatures = parsedRoute.features[0].properties;
+
+      const temp = parsedWeather.current_weather.temperature;
+      const weather = weatherCode[parsedWeather.current_weather.weathercode];
+      const tempUnits = parsedWeather.current_weather_units.temperature;
+
       document.getElementById("temp").innerHTML = temp + " " + tempUnits;
       document.getElementById("weather-condition").innerHTML = weather;
+
+      hours = Math.floor(routingFeatures.summary.duration / 3600);
+      minutes = Math.floor((routingFeatures.summary.duration % 3600) / 60);
+      distance = (routingFeatures.summary.distance * 0.000621371).toFixed(2);
+
+      document.getElementById("travel-time").innerHTML = `${hours}hr ${minutes}min`;
+      document.getElementById("distance").innerHTML = distance;
+
+      console.log(parsedRoute);
     })
     .catch((err) => {
       console.log(err);
