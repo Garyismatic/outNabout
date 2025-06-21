@@ -34,12 +34,19 @@ const weatherCode = {
 };
 
 const handleSearch = (e) => {
+  const resultsArea = document.getElementById("results");
+  const userInputArea = document.getElementById("user-input");
+
+  resultsArea.classList.remove("hidden");
+  userInputArea.classList.add("hidden");
+  userInputArea.classList.remove("active");
+
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const userLat = position.coords.latitude;
-      const usetLong = position.coords.longitude;
+      const userLong = position.coords.longitude;
 
-      const start = `${usetLong},${userLat}`;
+      const start = `${userLong},${userLat}`;
       search = searchBox[0].value;
 
       fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${search}`)
