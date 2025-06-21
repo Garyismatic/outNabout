@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
-const axios = require("axios");
 const { getRoute } = require("./mapFuncs.js");
 
 dotenv.config();
