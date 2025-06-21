@@ -48,14 +48,19 @@ const handleSearch = (e) => {
         })
         .then((coordinates) => {
           console.log(coordinates); //<-------- use for a comprehensive list of cities
+
           const result = coordinates.results[0];
           const county = result.admin2;
           const city = result.name;
           const { latitude, longitude } = coordinates.results[0];
-          const foodQuery = `
+          const overpassQuery = `
             [out:json];
             ( 
-               node["amenity"~"cafe|restaurant|fast_food"](around:1000,${latitude},${longitude});
+              node["amenity"~"cafe|restaurant|fast_food|bar|parking|atm|fountain"](around:1000,${latitude},${longitude});
+              node["leisure"~"park|amusement_arcade|escape_game|nature_reserve|playground|water_park"](around:1000,${latitude},${longitude});
+              node["tourism"~"viewpoint|attraction|artwork|museum"](around:1000,${latitude},${longitude});
+              node["natural"~"wood|beach|cliff"](around:1000,${latitude},${longitude});
+              node["historic"~"memorial|monument|ruins"](around:1000,${latitude},${longitude});
             );
             out body;
             `;
@@ -78,7 +83,7 @@ const handleSearch = (e) => {
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
               },
-              body: `data=${encodeURIComponent(foodQuery)}`,
+              body: `data=${encodeURIComponent(overpassQuery)}`,
             }),
           ]);
         })
@@ -86,7 +91,8 @@ const handleSearch = (e) => {
           return Promise.all([weather.json(), route.json(), places.json()]);
         })
         .then(([parsedWeather, parsedRoute, parsedPlaces]) => {
-          console.log(parsedPlaces); // <------------ logging the places data to help decide how to filter them.
+          console.log(parsedPlaces); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
+
           const routingFeatures = parsedRoute.features[0].properties;
 
           const temp = parsedWeather.current_weather.temperature;
@@ -107,7 +113,7 @@ const handleSearch = (e) => {
           ).innerHTML = `${hours}hr ${minutes}min`;
           document.getElementById("distance").innerHTML = distance;
 
-          console.log(parsedRoute);
+          console.log(parsedRoute); //<------------------ can use to show directions
         })
         .catch((err) => {
           console.log(err);

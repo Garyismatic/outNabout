@@ -4,25 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/CSS/main.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Yellowtail&display=swap"
+      rel="stylesheet"
+    />
     <script src="script.js" defer></script>
     <title>Out-N-About</title>
   </head>
   <body>
     <section id="app-container">
       <section id="header">
-        <h1>outNabout</h1>
+        <h1 id="app-title">
+          <span id="out">out </span><span id="n">N</span> about
+        </h1>
       </section>
       <section id="user-input">
-        <label for="destination">Destination</label><br />
         <input
           type="text"
           id="destination"
           name="destination"
-          placeholder="city"
+          placeholder="City Destination"
         />
-        <button type="button" id="search-button">Search</button>
+        <button type="button" id="search-button">
+          <img src="./CSS/icons/icons8-search-100.png" id="search-icon" />
+        </button>
       </section>
-      <section id="results">
+      <section id="results" class="hidden">
         <section id="weather-info">
           <h3>Weather</h3>
           <p>City: <span id="city"></span></p>
@@ -35,9 +42,12 @@
           <p>Distance: <span id="distance"></span></p>
         </section>
       </section>
-      <section id="footer">
-        <h5>Created by <span id="my-name">Gary Evans</span></h5>
-      </section>
+    </section>
+    <section id="footer">
+      <h5>
+        Created by:<br />
+        <span id="my-name">Gary Evans</span>
+      </h5>
     </section>
   </body>
 </html>
