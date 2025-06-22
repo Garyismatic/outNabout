@@ -69,15 +69,38 @@ body {
 }
 
 #results {
-  border: #111 dashed 3px;
-  padding: 20px;
+  /* border: #111 dashed 3px; */
+  padding: 10px;
   min-width: 80%;
   margin: 10px;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
-#weather-info {
-  border: #111 dashed 1px;
+.info-box {
+  /* border: #111 dashed 1px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  margin: 5px auto;
+  border: rgb(202, 201, 201) solid 1px;
+  border-radius: 10px;
+}
+
+.icon {
+  height: 64px;
+  width: 64px;
+}
+
+.label {
+  font-family: "yellowtail", cursive;
+}
+
+.sans {
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
 }
 
 #footer {
