@@ -48,8 +48,9 @@ const handleSearch = (e) => {
   const userInputArea = document.getElementById("user-input");
 
   resultsArea.classList.remove("hidden");
+  resultsArea.classList.add("grid");
+  userInputArea.classList.remove("flex");
   userInputArea.classList.add("hidden");
-  userInputArea.classList.remove("active");
 
   navigator.geolocation.getCurrentPosition(
     (position) => {

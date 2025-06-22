@@ -18,7 +18,7 @@
           <span id="out">out </span><span id="n">N</span> about
         </h1>
       </section>
-      <section id="user-input" class="hidden">
+      <section id="user-input" class="flex">
         <input
           type="text"
           id="destination"
@@ -30,7 +30,7 @@
         </button>
       </section>
     </section>
-    <section id="results" class="active">
+    <section id="results" class="hidden">
       <section id="weather-info" class="info-box">
         <p>
           <span id="weather-condition" class="icon"
@@ -47,11 +47,24 @@
           /></span>
         </p>
         <p class="label">
-          ETA: <span id="travel-time" class="sans">1hr 05min</span>
+          <span id="travel-time" class="sans">1hr 05min</span>
         </p>
         <p class="label">
           <span id="distance" class="sans">55 miles</span>
         </p>
+      </section>
+      <section id="tags">
+        <button id="food-btn" class="places-btn">Food</button>
+        <button id="fast-food-btn" class="places-btn">Fast Food</button>
+        <button id="pubs-btn" class="places-btn">pubs</button>
+        <button id="outside-spaces-btn" class="places-btn">
+          Outside Spaces
+        </button>
+        <button id="indoor-spaces-btn" class="places-btn">Indoor Places</button>
+        <button id="kids-btn" class="places-btn">Kids</button>
+        <button id="entertainment-btn" class="places-btn">Entertainment</button>
+        <button id="parking-btn" class="places-btn">parking</button>
+        <button id="services-btn" class="places-btn">Services</button>
       </section>
     </section>
     <section id="footer">
