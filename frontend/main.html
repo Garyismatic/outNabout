@@ -4,40 +4,114 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/CSS/main.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Yellowtail&display=swap"
+      rel="stylesheet"
+    />
     <script src="script.js" defer></script>
     <title>Out-N-About</title>
   </head>
   <body>
     <section id="app-container">
       <section id="header">
-        <h1>outNabout</h1>
+        <h1 id="app-title">
+          <span id="out">out </span><span id="n">N</span> about
+        </h1>
       </section>
-      <section id="user-input">
-        <label for="destination">Destination</label><br />
+      <section id="user-input" class="flex">
         <input
           type="text"
           id="destination"
           name="destination"
-          placeholder="city"
+          placeholder="City Destination"
         />
-        <button type="button" id="search-button">Search</button>
+        <button type="button" id="search-button">
+          <img src="./CSS/icons/search.png" id="search-icon" />
+        </button>
       </section>
-      <section id="results">
-        <section id="weather-info">
-          <h3>Weather</h3>
-          <p>City: <span id="city"></span></p>
-          <p>Temperature: <span id="temp"></span></p>
-          <p>Conditions: <span id="weather-condition"></span></p>
-        </section>
-        <section id="travel-info">
-          <h3>Travel</h3>
-          <p>Time to Destination: <span id="travel-time"></span></p>
-          <p>Distance: <span id="distance"></span></p>
-        </section>
+    </section>
+    <section id="results" class="hidden">
+      <section id="weather-info" class="info-box">
+        <p>
+          <span id="weather-condition" class="icon"
+            ><img src="./CSS/icons/overcast.png"
+          /></span>
+        </p>
+        <p><span id="city" class="label">Rochford Essex</span></p>
+        <p><span id="temp" class="sans">23.4 C</span></p>
       </section>
-      <section id="footer">
-        <h5>Created by <span id="my-name">Gary Evans</span></h5>
+      <section id="travel-info" class="info-box">
+        <p>
+          <span id="transport-mode" class="icon"
+            ><img src="./CSS/icons/car.png"
+          /></span>
+        </p>
+        <p>
+          <span id="travel-time" class="sans">1hr 05min</span>
+        </p>
+        <p>
+          <span id="distance" class="sans">55 miles</span>
+        </p>
       </section>
+      <section id="tags">
+        <button id="food-btn" class="places-btn">
+          <img
+            src="./CSS/icons/restaurant.png"
+            alt="Restaurant Icon"
+            class="icon"
+          />
+        </button>
+        <button id="fast-food-btn" class="places-btn">
+          <img src="./CSS/icons/food.png" alt="Fast food Icon" class="icon" />
+        </button>
+        <button id="pubs-btn" class="places-btn">
+          <img
+            src="./CSS/icons/pubs.png"
+            alt="Pubs and Bars Icon"
+            class="icon"
+          />
+        </button>
+        <button id="outside-spaces-btn" class="places-btn">
+          <img
+            src="./CSS/icons/outside.png"
+            alt="Outside places Icon"
+            class="icon"
+          />
+        </button>
+        <button id="indoor-spaces-btn" class="places-btn">
+          <img
+            src="./CSS/icons/indoor.png"
+            alt="Indoor Places Icon"
+            class="icon"
+          />
+        </button>
+        <button id="kids-btn" class="places-btn">
+          <img src="./CSS/icons/kids.png" alt="Kids Icon" class="icon" />
+        </button>
+        <button id="entertainment-btn" class="places-btn">
+          <img
+            src="./CSS/icons/entertainment.png"
+            alt="Entertainment Icon"
+            class="icon"
+          />
+        </button>
+        <button id="parking-btn" class="places-btn">
+          <img src="./CSS/icons/parking.png" alt="Parking Icon" class="icon" />
+        </button>
+        <button id="services-btn" class="places-btn">
+          <img
+            src="./CSS/icons/services.png"
+            alt="Services Icon"
+            class="icon"
+          />
+        </button>
+      </section>
+    </section>
+    <section id="footer">
+      <h5>
+        Created by:<br />
+        <span id="my-name">Gary Evans</span>
+      </h5>
     </section>
   </body>
 </html>
