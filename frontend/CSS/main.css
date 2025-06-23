@@ -7,7 +7,7 @@ body {
   align-items: center;
   background-image: url("./background-img.jpg");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 100%;
   flex-direction: column;
 }
 
@@ -61,11 +61,12 @@ body {
 
 #search-button {
   margin: 50px auto;
-  border: none;
   border-radius: 50%;
-  padding: 15px;
-  background: transparent;
-  box-shadow: 0 0 22px 15px rgba(255, 255, 255, 0.4);
+  padding: 30px;
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.4);
+  border: rgba(255, 255, 255, 0.3) solid 1px;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
 }
 
 #results {
@@ -112,10 +113,11 @@ body {
 .places-btn {
   height: 90px;
   width: 90px;
-  margin: 5px;
-  border: rgba(141, 138, 138, 0.3) solid 1px;
+  margin: 5px auto;
+  border: rgba(255, 255, 255, 0.3) solid 1px;
   border-radius: 15px;
   background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
 }
 
 #footer {
