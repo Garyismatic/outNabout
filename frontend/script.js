@@ -43,6 +43,17 @@ const weatherCode = {
   99: thunderstorm,
 };
 
+let restaurants = []
+const fastFoodPlaces = []
+const bars = []
+const outdoorSpaces = []
+const indoorAttractions = []
+const kidsActivities = []
+const entertainmentVenues = []
+const parkingPlaces = []
+const services = []
+
+
 const handleSearch = (e) => {
   const resultsArea = document.getElementById("results");
   const userInputArea = document.getElementById("user-input");
@@ -74,7 +85,7 @@ const handleSearch = (e) => {
           const overpassQuery = `
             [out:json];
             ( 
-              node["amenity"~"cafe|restaurant|fast_food|bar|parking|atm|fountain"](around:1000,${latitude},${longitude});
+              node["amenity"~"cafe|restaurant|fast_food|bar|parking|atm"](around:1000,${latitude},${longitude});
               node["leisure"~"park|amusement_arcade|escape_game|nature_reserve|playground|water_park"](around:1000,${latitude},${longitude});
               node["tourism"~"viewpoint|attraction|artwork|museum"](around:1000,${latitude},${longitude});
               node["natural"~"wood|beach|cliff"](around:1000,${latitude},${longitude});
@@ -110,6 +121,12 @@ const handleSearch = (e) => {
         })
         .then(([parsedWeather, parsedRoute, parsedPlaces]) => {
           console.log(parsedPlaces); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
+
+          restaurants = parsedPlaces.elements.filter((element) => {
+            return element.tags.amenity === 'restaurant' && element.tags['fhrs:id']
+          })
+
+          console.log(restaurants)
 
           const routingFeatures = parsedRoute.features[0].properties;
 
