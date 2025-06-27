@@ -1,5 +1,7 @@
 const searchBox = document.getElementsByName("destination");
 const searchButton = document.getElementById("search-button");
+const foodButton = document.getElementById("food-btn");
+const backButton = document.getElementById("return-btn");
 const clear = "./CSS/icons/sun.png";
 const mainlyClear = "./CSS/icons/mainly-clear.png";
 const overcast = "./CSS/icons/overcast.png";
@@ -12,6 +14,7 @@ const snow = "./CSS/icons/snow.png";
 const thunderstorm = "./CSS/icons/thunderstorm.png";
 
 let search = "";
+
 const weatherCode = {
   0: clear,
   1: mainlyClear,
@@ -43,18 +46,16 @@ const weatherCode = {
   99: thunderstorm,
 };
 
-let restaurants = []
-const fastFoodPlaces = []
-const bars = []
-const outdoorSpaces = []
-const indoorAttractions = []
-const kidsActivities = []
-const entertainmentVenues = []
-const parkingPlaces = []
-const services = []
+let FoodPlaces = [];
+let bars = [];
+let outdoorSpaces = [];
+let indoorAttractions = [];
+let kidsActivities = [];
+let entertainmentVenues = [];
+let parkingPlaces = [];
+let services = [];
 
-
-const handleSearch = (e) => {
+const handleSearch = () => {
   const resultsArea = document.getElementById("results");
   const userInputArea = document.getElementById("user-input");
 
@@ -76,7 +77,7 @@ const handleSearch = (e) => {
           return res.json();
         })
         .then((coordinates) => {
-          console.log(coordinates); //<-------- use for a comprehensive list of cities
+          console.log(coordinates, "<----- Destination search results"); //<-------- use for a comprehensive list of cities
 
           const result = coordinates.results[0];
           const county = result.admin2;
@@ -120,13 +121,19 @@ const handleSearch = (e) => {
           return Promise.all([weather.json(), route.json(), places.json()]);
         })
         .then(([parsedWeather, parsedRoute, parsedPlaces]) => {
-          console.log(parsedPlaces); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
+          console.log(parsedPlaces, "<------- all of the places found"); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
 
-          restaurants = parsedPlaces.elements.filter((element) => {
-            return element.tags.amenity === 'restaurant' && element.tags['fhrs:id']
-          })
+          FoodPlaces = parsedPlaces.elements.filter((element) => {
+            return (
+              (element.tags.amenity === "restaurant" &&
+                element.tags["fhrs:id"]) ||
+              (element.tags.amenity === "fast_food" &&
+                element.tags["fhrs:id"]) ||
+              (element.tags.amenity === "cafe" && element.tags["fhrs:id"])
+            );
+          });
 
-          console.log(restaurants)
+          console.log(FoodPlaces, "<------ filtered places found");
 
           const routingFeatures = parsedRoute.features[0].properties;
 
@@ -150,7 +157,10 @@ const handleSearch = (e) => {
           ).innerHTML = `${hours}hr ${minutes}min`;
           document.getElementById("distance").innerHTML = distance;
 
-          console.log(parsedRoute); //<------------------ can use to show directions
+          console.log(
+            parsedRoute,
+            "<--------- Route data such as directions, distance and travel time"
+          ); //<------------------ can use to show directions
         })
         .catch((err) => {
           console.log(err);
@@ -162,4 +172,47 @@ const handleSearch = (e) => {
   );
 };
 
+const showFoodPlaces = () => {
+  const results = document.getElementById("results");
+  const lists = document.getElementById("lists");
+
+  let temp, card, newCard;
+
+  temp = document.getElementsByTagName("template")[0];
+  card = temp.content.querySelector(".list-card");
+  FoodPlaces.forEach((place) => {
+    newCard = document.importNode(card, true);
+
+    const imgContainer = newCard.querySelector(".list-item-img");
+    const img = document.createElement("img");
+
+    newCard.getElementsByTagName("h2")[0].textContent = place.tags.name;
+    newCard.getElementsByTagName("p")[0].textContent =
+      place.tags["addr:street"] + " " + place.tags["addr:postcode"];
+
+    img.src = `./CSS/icons/${place.tags.amenity}.png`;
+    img.alt = `${place.tags.amenity} icon`;
+    img.classList.add("icon");
+
+    newCard.classList.add("flex");
+    document.getElementById("lists").appendChild(newCard);
+    imgContainer.appendChild(img);
+  });
+
+  results.classList.add("hidden");
+  results.classList.remove("grid");
+  lists.classList.remove("hidden");
+};
+
+const handleReturn = () => {
+  const lists = document.getElementById("lists");
+  const results = document.getElementById("results");
+
+  results.classList.add("grid");
+  results.classList.remove("hidden");
+  lists.classList.add("hidden");
+};
+
 searchButton.addEventListener("click", handleSearch);
+backButton.addEventListener("click", handleReturn);
+foodButton.addEventListener("click", showFoodPlaces);
