@@ -1,7 +1,15 @@
 const searchBox = document.getElementsByName("destination");
 const searchButton = document.getElementById("search-button");
-const foodButton = document.getElementById("food-btn");
 const backButton = document.getElementById("return-btn");
+const foodButton = document.getElementById("food-btn");
+const barsButton = document.getElementById("pubs-btn");
+const outdoorButton = document.getElementById("outside-spaces-btn");
+const indoorButton = document.getElementById("indoor-spaces-btn");
+const kidsButton = document.getElementById("kids-btn");
+const entertainmentButton = document.getElementById("entertainment-btn");
+const parkingButton = document.getElementById("parking-btn");
+const atmButton = document.getElementById("services-btn");
+
 const clear = "./CSS/icons/sun.png";
 const mainlyClear = "./CSS/icons/mainly-clear.png";
 const overcast = "./CSS/icons/overcast.png";
@@ -46,7 +54,39 @@ const weatherCode = {
   99: thunderstorm,
 };
 
-let FoodPlaces = [];
+const foodAmenity = ["restaurant", "fast_food", "cafe"];
+const outdoorAmenity = [
+  "park",
+  "nature_reserve",
+  "wood",
+  "beach",
+  "cliff",
+  "memorial",
+  "monument",
+  "ruins",
+  "viewpoint",
+];
+const indoorAmenities = [
+  "artwork",
+  "escape_game",
+  "museum",
+  "amusement_arcade",
+];
+const kidsAmenities = [
+  "amusement_arcade",
+  "playground",
+  "water_park",
+  "museum",
+  "park",
+];
+const entertainmentAmenities = [
+  "amusement_arcade",
+  "escape_game",
+  "water_park",
+  "attraction",
+];
+
+let foodPlaces = [];
 let bars = [];
 let outdoorSpaces = [];
 let indoorAttractions = [];
@@ -54,6 +94,14 @@ let kidsActivities = [];
 let entertainmentVenues = [];
 let parkingPlaces = [];
 let services = [];
+
+const getCategory = (tags) => {
+  const tagList = ["amenity", "leisure", "tourism", "natural", "historic"];
+  for (let tag of tagList) {
+    if (tags[tag]) return { type: "tag", category: tags[tag] };
+  }
+  return { type: "unknown", category: "default" };
+};
 
 const handleSearch = () => {
   const resultsArea = document.getElementById("results");
@@ -123,17 +171,62 @@ const handleSearch = () => {
         .then(([parsedWeather, parsedRoute, parsedPlaces]) => {
           console.log(parsedPlaces, "<------- all of the places found"); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
 
-          FoodPlaces = parsedPlaces.elements.filter((element) => {
+          foodPlaces = parsedPlaces.elements.filter((element) => {
             return (
-              (element.tags.amenity === "restaurant" &&
-                element.tags["fhrs:id"]) ||
-              (element.tags.amenity === "fast_food" &&
-                element.tags["fhrs:id"]) ||
-              (element.tags.amenity === "cafe" && element.tags["fhrs:id"])
+              foodAmenity.includes(element.tags.amenity) &&
+              element.tags["fhrs:id"]
             );
           });
 
-          console.log(FoodPlaces, "<------ filtered places found");
+          bars = parsedPlaces.elements.filter((element) => {
+            return element.tags.amenity === "bar" && element.tags["fhrs:id"];
+          });
+
+          outdoorSpaces = parsedPlaces.elements.filter((element) => {
+            return outdoorAmenity.includes(
+              element.tags.leisure ||
+                element.tags.tourism ||
+                element.tags.natural ||
+                element.tags.historic
+            );
+          });
+
+          indoorAttractions = parsedPlaces.elements.filter((element) => {
+            return indoorAmenities.includes(
+              element.tags.leisure ||
+                element.tags.tourism ||
+                element.tags.natural ||
+                element.tags.historic
+            );
+          });
+
+          kidsActivities = parsedPlaces.elements.filter((element) => {
+            return kidsAmenities.includes(
+              element.tags.leisure ||
+                element.tags.tourism ||
+                element.tags.natural ||
+                element.tags.historic
+            );
+          });
+
+          entertainmentVenues = parsedPlaces.elements.filter((element) => {
+            return entertainmentAmenities.includes(
+              element.tags.leisure ||
+                element.tags.tourism ||
+                element.tags.natural ||
+                element.tags.historic
+            );
+          });
+
+          parkingPlaces = parsedPlaces.elements.filter((element) => {
+            return element.tags.amenity === "parking" && element.tags.name;
+          });
+
+          services = parsedPlaces.elements.filter((element) => {
+            return element.tags.amenity === "atm" && element.tags.name;
+          });
+
+          console.log(outdoorSpaces, "<----- outdoor spaces");
 
           const routingFeatures = parsedRoute.features[0].properties;
 
@@ -172,16 +265,20 @@ const handleSearch = () => {
   );
 };
 
-const showFoodPlaces = () => {
+const showPlaces = (placesArray) => {
   const results = document.getElementById("results");
   const lists = document.getElementById("lists");
+
+  lists.innerHTML = "";
 
   let temp, card, newCard;
 
   temp = document.getElementsByTagName("template")[0];
   card = temp.content.querySelector(".list-card");
-  FoodPlaces.forEach((place) => {
+  placesArray.forEach((place) => {
     newCard = document.importNode(card, true);
+
+    const { category } = getCategory(place.tags);
 
     const imgContainer = newCard.querySelector(".list-item-img");
     const img = document.createElement("img");
@@ -190,7 +287,7 @@ const showFoodPlaces = () => {
     newCard.getElementsByTagName("p")[0].textContent =
       place.tags["addr:street"] + " " + place.tags["addr:postcode"];
 
-    img.src = `./CSS/icons/${place.tags.amenity}.png`;
+    img.src = `./CSS/icons/${category}.png`;
     img.alt = `${place.tags.amenity} icon`;
     img.classList.add("icon");
 
@@ -202,6 +299,7 @@ const showFoodPlaces = () => {
   results.classList.add("hidden");
   results.classList.remove("grid");
   lists.classList.remove("hidden");
+  backButton.classList.remove("hidden");
 };
 
 const handleReturn = () => {
@@ -211,8 +309,32 @@ const handleReturn = () => {
   results.classList.add("grid");
   results.classList.remove("hidden");
   lists.classList.add("hidden");
+  backButton.classList.add("hidden");
 };
 
 searchButton.addEventListener("click", handleSearch);
 backButton.addEventListener("click", handleReturn);
-foodButton.addEventListener("click", showFoodPlaces);
+foodButton.addEventListener("click", (e) => {
+  showPlaces(foodPlaces);
+});
+barsButton.addEventListener("click", (e) => {
+  showPlaces(bars);
+});
+outdoorButton.addEventListener("click", (e) => {
+  showPlaces(outdoorSpaces);
+});
+indoorButton.addEventListener("click", (e) => {
+  showPlaces(indoorAttractions);
+});
+kidsButton.addEventListener("click", (e) => {
+  showPlaces(kidsActivities);
+});
+entertainmentButton.addEventListener("click", (e) => {
+  showPlaces(entertainmentVenues);
+});
+parkingButton.addEventListener("click", (e) => {
+  showPlaces(parkingPlaces);
+});
+atmButton.addEventListener("click", (e) => {
+  showPlaces(services);
+});

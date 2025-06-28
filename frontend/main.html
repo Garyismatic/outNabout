@@ -25,7 +25,7 @@
           name="destination"
           placeholder="City Destination"
         />
-        <button type="button" id="search-button" class="misty-container">
+        <button id="search-button" class="misty-container">
           <img src="./CSS/icons/search.png" id="search-icon" />
         </button>
       </section>
@@ -59,21 +59,21 @@
         </button>
         <button id="pubs-btn" class="places-btn misty-container">
           <img
-            src="./CSS/icons/pubs.png"
+            src="./CSS/icons/bar.png"
             alt="Pubs and Bars Icon"
             class="icon"
           />
         </button>
         <button id="outside-spaces-btn" class="places-btn misty-container">
           <img
-            src="./CSS/icons/outside.png"
+            src="./CSS/icons/wood.png"
             alt="Outside places Icon"
             class="icon"
           />
         </button>
         <button id="indoor-spaces-btn" class="places-btn misty-container">
           <img
-            src="./CSS/icons/indoor.png"
+            src="./CSS/icons/museum.png"
             alt="Indoor Places Icon"
             class="icon"
           />
@@ -92,28 +92,23 @@
           <img src="./CSS/icons/parking.png" alt="Parking Icon" class="icon" />
         </button>
         <button id="services-btn" class="places-btn misty-container">
-          <img
-            src="./CSS/icons/services.png"
-            alt="Services Icon"
-            class="icon"
-          />
+          <img src="./CSS/icons/atm.png" alt="Services Icon" class="icon" />
         </button>
       </section>
     </section>
-    <section id="lists" class="hidden">
-      <button id="return-btn" class="misty-container">
-        <img src="./CSS/icons/back.png" alt="return arrow" class="back-icon" />
-      </button>
-      <template>
-        <section class="list-card misty-container">
-          <section class="list-item-img"></section>
-          <section class="list-text-container">
-            <h2 class="list-item-name list-text label"></h2>
-            <p class="list-item-address list-text sans"></p>
-          </section>
+    <template>
+      <section class="list-card misty-container">
+        <section class="list-item-img"></section>
+        <section class="list-text-container">
+          <h2 class="list-item-name list-text label"></h2>
+          <p class="list-item-address list-text sans"></p>
         </section>
-      </template>
-    </section>
+      </section>
+    </template>
+    <button id="return-btn" class="misty-container hidden">
+      <img src="./CSS/icons/back.png" alt="return arrow" class="back-icon" />
+    </button>
+    <section id="lists" class="hidden"></section>
     <section id="footer">
       <h5>
         Created by:<br />
