@@ -25,22 +25,22 @@
           name="destination"
           placeholder="City Destination"
         />
-        <button type="button" id="search-button">
+        <button id="search-button" class="misty-container">
           <img src="./CSS/icons/search.png" id="search-icon" />
         </button>
       </section>
     </section>
     <section id="results" class="hidden">
-      <section id="weather-info" class="info-box">
+      <section id="weather-info" class="info-box misty-container">
         <p>
           <span id="weather-condition" class="icon"
             ><img src="./CSS/icons/overcast.png"
           /></span>
         </p>
-        <p><span id="city" class="label">Rochford Essex</span></p>
-        <p><span id="temp" class="sans">23.4 C</span></p>
+        <p><span id="city" class="sans"></span></p>
+        <p><span id="temp" class="sans"></span></p>
       </section>
-      <section id="travel-info" class="info-box">
+      <section id="travel-info" class="info-box misty-container">
         <p>
           <span id="transport-mode" class="icon"
             ><img src="./CSS/icons/car.png"
@@ -54,59 +54,61 @@
         </p>
       </section>
       <section id="tags">
-        <button id="food-btn" class="places-btn">
-          <img
-            src="./CSS/icons/restaurant.png"
-            alt="Restaurant Icon"
-            class="icon"
-          />
+        <button id="food-btn" class="places-btn misty-container">
+          <img src="./CSS/icons/food.png" alt="food Icon" class="icon" />
         </button>
-        <button id="fast-food-btn" class="places-btn">
-          <img src="./CSS/icons/food.png" alt="Fast food Icon" class="icon" />
-        </button>
-        <button id="pubs-btn" class="places-btn">
+        <button id="pubs-btn" class="places-btn misty-container">
           <img
-            src="./CSS/icons/pubs.png"
+            src="./CSS/icons/bar.png"
             alt="Pubs and Bars Icon"
             class="icon"
           />
         </button>
-        <button id="outside-spaces-btn" class="places-btn">
+        <button id="outside-spaces-btn" class="places-btn misty-container">
           <img
-            src="./CSS/icons/outside.png"
+            src="./CSS/icons/wood.png"
             alt="Outside places Icon"
             class="icon"
           />
         </button>
-        <button id="indoor-spaces-btn" class="places-btn">
+        <button id="indoor-spaces-btn" class="places-btn misty-container">
           <img
-            src="./CSS/icons/indoor.png"
+            src="./CSS/icons/museum.png"
             alt="Indoor Places Icon"
             class="icon"
           />
         </button>
-        <button id="kids-btn" class="places-btn">
+        <button id="kids-btn" class="places-btn misty-container">
           <img src="./CSS/icons/kids.png" alt="Kids Icon" class="icon" />
         </button>
-        <button id="entertainment-btn" class="places-btn">
+        <button id="entertainment-btn" class="places-btn misty-container">
           <img
             src="./CSS/icons/entertainment.png"
             alt="Entertainment Icon"
             class="icon"
           />
         </button>
-        <button id="parking-btn" class="places-btn">
+        <button id="parking-btn" class="places-btn misty-container">
           <img src="./CSS/icons/parking.png" alt="Parking Icon" class="icon" />
         </button>
-        <button id="services-btn" class="places-btn">
-          <img
-            src="./CSS/icons/services.png"
-            alt="Services Icon"
-            class="icon"
-          />
+        <button id="services-btn" class="places-btn misty-container">
+          <img src="./CSS/icons/atm.png" alt="Services Icon" class="icon" />
         </button>
       </section>
     </section>
+    <template>
+      <section class="list-card misty-container">
+        <section class="list-item-img"></section>
+        <section class="list-text-container">
+          <h2 class="list-item-name list-text label"></h2>
+          <p class="list-item-subtext list-text sans"></p>
+        </section>
+      </section>
+    </template>
+    <button id="return-btn" class="misty-container hidden">
+      <img src="./CSS/icons/back.png" alt="return arrow" class="back-icon" />
+    </button>
+    <section id="lists" class="hidden"></section>
     <section id="footer">
       <h5>
         Created by:<br />
