@@ -129,7 +129,7 @@ const handleSearch = () => {
 
           const result = coordinates.results[0];
 
-          const county = result.admin2;
+          const county = result.admin2 || "";
           const city = result.name;
 
           const { latitude, longitude } = coordinates.results[0];
@@ -240,6 +240,8 @@ const handleSearch = () => {
           services = parsedPlaces.elements.filter((element) => {
             return element.tags.amenity === "atm";
           });
+
+          console.log(outdoorSpaces, '<-------- outdoor')
 
           const routingFeatures = parsedRoute.features[0].properties;
 
