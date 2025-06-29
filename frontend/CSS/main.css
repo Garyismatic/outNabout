@@ -3,13 +3,9 @@ body {
   padding: 0;
   min-width: 100vw;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
   background-image: url("./background-img.jpg");
   background-repeat: no-repeat;
   background-size: 100%;
-  flex-direction: column;
-  justify-content: space-around;
 }
 
 #app-container {
@@ -157,6 +153,10 @@ p {
 
 #footer {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .hidden {
