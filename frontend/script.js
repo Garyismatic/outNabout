@@ -128,9 +128,12 @@ const handleSearch = () => {
           console.log(coordinates, "<----- Destination search results"); //<-------- use for a comprehensive list of cities
 
           const result = coordinates.results[0];
+
           const county = result.admin2;
           const city = result.name;
+
           const { latitude, longitude } = coordinates.results[0];
+
           const overpassQuery = `
             [out:json];
             ( 
@@ -183,50 +186,60 @@ const handleSearch = () => {
           });
 
           outdoorSpaces = parsedPlaces.elements.filter((element) => {
-            return outdoorAmenity.includes(
-              element.tags.leisure ||
-                element.tags.tourism ||
-                element.tags.natural ||
-                element.tags.historic
+            return (
+              element.tags.name &&
+              outdoorAmenity.includes(
+                element.tags.leisure ||
+                  element.tags.tourism ||
+                  element.tags.natural ||
+                  element.tags.historic
+              )
             );
           });
 
           indoorAttractions = parsedPlaces.elements.filter((element) => {
-            return indoorAmenities.includes(
-              element.tags.leisure ||
-                element.tags.tourism ||
-                element.tags.natural ||
-                element.tags.historic
+            return (
+              element.tags.name &&
+              indoorAmenities.includes(
+                element.tags.leisure ||
+                  element.tags.tourism ||
+                  element.tags.natural ||
+                  element.tags.historic
+              )
             );
           });
 
           kidsActivities = parsedPlaces.elements.filter((element) => {
-            return kidsAmenities.includes(
-              element.tags.leisure ||
-                element.tags.tourism ||
-                element.tags.natural ||
-                element.tags.historic
+            return (
+              element.tags.name &&
+              kidsAmenities.includes(
+                element.tags.leisure ||
+                  element.tags.tourism ||
+                  element.tags.natural ||
+                  element.tags.historic
+              )
             );
           });
 
           entertainmentVenues = parsedPlaces.elements.filter((element) => {
-            return entertainmentAmenities.includes(
-              element.tags.leisure ||
-                element.tags.tourism ||
-                element.tags.natural ||
-                element.tags.historic
+            return (
+              element.tags.name &&
+              entertainmentAmenities.includes(
+                element.tags.leisure ||
+                  element.tags.tourism ||
+                  element.tags.natural ||
+                  element.tags.historic
+              )
             );
           });
 
           parkingPlaces = parsedPlaces.elements.filter((element) => {
-            return element.tags.amenity === "parking" && element.tags.name;
+            return element.tags.amenity === "parking";
           });
 
           services = parsedPlaces.elements.filter((element) => {
-            return element.tags.amenity === "atm" && element.tags.name;
+            return element.tags.amenity === "atm";
           });
-
-          console.log(outdoorSpaces, "<----- outdoor spaces");
 
           const routingFeatures = parsedRoute.features[0].properties;
 
@@ -240,9 +253,11 @@ const handleSearch = () => {
             "weather-condition"
           ).innerHTML = `<img src=${weather} />`;
 
-          hours = Math.floor(routingFeatures.summary.duration / 3600);
-          minutes = Math.floor((routingFeatures.summary.duration % 3600) / 60);
-          distance =
+          const hours = Math.floor(routingFeatures.summary.duration / 3600);
+          const minutes = Math.floor(
+            (routingFeatures.summary.duration % 3600) / 60
+          );
+          const distance =
             (routingFeatures.summary.distance / 1609.344).toFixed(1) + " Miles";
 
           document.getElementById(
@@ -256,7 +271,7 @@ const handleSearch = () => {
           ); //<------------------ can use to show directions
         })
         .catch((err) => {
-          console.log(err);
+          console.log("promise chain err -------> ", err);
         });
     },
     (error) => {
@@ -283,13 +298,17 @@ const showPlaces = (placesArray) => {
     const imgContainer = newCard.querySelector(".list-item-img");
     const img = document.createElement("img");
 
-    newCard.getElementsByTagName("h2")[0].textContent = place.tags.name;
-    newCard.getElementsByTagName("p")[0].textContent =
-      place.tags["addr:street"] + " " + place.tags["addr:postcode"];
-
     img.src = `./CSS/icons/${category}.png`;
     img.alt = `${place.tags.amenity} icon`;
     img.classList.add("icon");
+
+    const placeName = place.tags.name || place.tags.brand || place.tags.amenity;
+
+    const street = place.tags["addr:street"] || "";
+    const postcode = place.tags["addr:postcode"] || "";
+
+    newCard.getElementsByTagName("h2")[0].textContent = placeName;
+    newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
 
     newCard.classList.add("flex");
     document.getElementById("lists").appendChild(newCard);
