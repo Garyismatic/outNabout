@@ -9,6 +9,7 @@ const kidsButton = document.getElementById("kids-btn");
 const entertainmentButton = document.getElementById("entertainment-btn");
 const parkingButton = document.getElementById("parking-btn");
 const atmButton = document.getElementById("services-btn");
+const homeButton = document.getElementById("app-title");
 
 const clear = "./CSS/icons/sun.png";
 const mainlyClear = "./CSS/icons/mainly-clear.png";
@@ -168,10 +169,12 @@ const handleSearch = () => {
             }),
           ]);
         })
-        .then(([weather, places]) => { //<----------- removed route from here its comented out in promise all above
+        .then(([weather, places]) => {
+          //<----------- removed route from here its comented out in promise all above
           return Promise.all([weather.json(), places.json()]);
         })
-        .then(([parsedWeather, parsedPlaces]) => { //<------------- removed parsedroute from here needs to be added into promise all above too
+        .then(([parsedWeather, parsedPlaces]) => {
+          //<------------- removed parsedroute from here needs to be added into promise all above too
 
           console.log(parsedPlaces, "<------- all of the places found"); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
 
@@ -276,25 +279,24 @@ const handleSearch = () => {
         .then(() => {
           const resultsArea = document.getElementById("results");
           const loadingScreen = document.getElementById("loading-screen");
-          const weatherBtn = document.getElementById('weather-info')
-          const travelBtn = document.getElementById('travel-info')
-          
+          const weatherBtn = document.getElementById("weather-info");
+          const travelBtn = document.getElementById("travel-info");
 
           loadingScreen.classList.add("hidden");
           loadingScreen.classList.remove("flex");
           resultsArea.classList.remove("hidden");
           resultsArea.classList.add("grid");
 
-          weatherBtn.classList.add('fade-in-1')
+          weatherBtn.classList.add("fade-in-1");
           travelBtn.classList.add("fade-in-2");
-          foodButton.classList.add('fade-in-1')
-          barsButton.classList.add('fade-in-2')
-          outdoorButton.classList.add('fade-in-3')
-          indoorButton.classList.add('fade-in-2')
-          kidsButton.classList.add('fade-in-3')
-          entertainmentButton.classList.add('fade-in-4')
-          parkingButton.classList.add('fade-in-3')
-          atmButton.classList.add('fade-in-4')
+          foodButton.classList.add("fade-in-1");
+          barsButton.classList.add("fade-in-2");
+          outdoorButton.classList.add("fade-in-3");
+          indoorButton.classList.add("fade-in-2");
+          kidsButton.classList.add("fade-in-3");
+          entertainmentButton.classList.add("fade-in-4");
+          parkingButton.classList.add("fade-in-3");
+          atmButton.classList.add("fade-in-4");
         })
         .catch((err) => {
           const loadingScreen = document.getElementById("loading-screen");
@@ -344,7 +346,7 @@ const showPlaces = (placesArray) => {
     newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
 
     newCard.classList.add("flex");
-    newCard.classList.add('slide')
+    newCard.classList.add("slide");
     document.getElementById("lists").appendChild(newCard);
     imgContainer.appendChild(img);
   });
@@ -363,7 +365,21 @@ const handleReturn = () => {
   results.classList.remove("hidden");
   lists.classList.add("hidden");
   backButton.classList.add("hidden");
-}
+};
+
+const returnHome = () => {
+  const homeScreen = document.getElementById("user-input");
+  const results = document.getElementById("results");
+  const list = document.getElementById("lists");
+
+  results.classList.add("hidden");
+  list.classList.add("hidden");
+  homeScreen.classList.remove("hidden");
+  homeScreen.classList.add("flex");
+  results.classList.remove("grid");
+  backButton.classList.add("hidden");
+  searchBox[0].value = "";
+};
 
 searchButton.addEventListener("click", handleSearch);
 backButton.addEventListener("click", handleReturn);
@@ -391,3 +407,4 @@ parkingButton.addEventListener("click", (e) => {
 atmButton.addEventListener("click", (e) => {
   showPlaces(services);
 });
+homeButton.addEventListener("click", returnHome);
