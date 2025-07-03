@@ -5,7 +5,7 @@ body {
   min-height: 100vh;
   background-image: url("./background-img.jpg");
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: contain;
 }
 
 #loading-screen {
@@ -70,6 +70,7 @@ body {
 }
 
 #destination {
+  opacity: 0;
   padding: 15px;
   margin: 30px auto;
   border-radius: 20px;
@@ -90,6 +91,7 @@ body {
 }
 
 #search-button {
+  opacity: 0;
   margin: 50px auto;
   border-radius: 50%;
   padding: 30px;

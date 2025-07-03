@@ -112,6 +112,8 @@ const handleSearch = () => {
   loadingScreen.classList.add("flex");
   userInputArea.classList.remove("flex");
   userInputArea.classList.add("hidden");
+  searchBox[0].classList.remove("fade-in-2");
+  searchButton.classList.remove("fade-in-3");
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -159,7 +161,7 @@ const handleSearch = () => {
 
           return Promise.all([
             fetch(weatherURL),
-            // fetch(routeURL),
+            fetch(routeURL),
             fetch(placesURL, {
               method: "POST",
               headers: {
@@ -169,13 +171,10 @@ const handleSearch = () => {
             }),
           ]);
         })
-        .then(([weather, places]) => {
-          //<----------- removed route from here its comented out in promise all above
-          return Promise.all([weather.json(), places.json()]);
+        .then(([weather, route, places]) => {
+          return Promise.all([weather.json(), route.json(), places.json()]);
         })
-        .then(([parsedWeather, parsedPlaces]) => {
-          //<------------- removed parsedroute from here needs to be added into promise all above too
-
+        .then(([parsedWeather, parsedRoute, parsedPlaces]) => {
           console.log(parsedPlaces, "<------- all of the places found"); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
 
           foodPlaces = parsedPlaces.elements.filter((element) => {
@@ -247,7 +246,7 @@ const handleSearch = () => {
 
           console.log(outdoorSpaces, "<-------- outdoor");
 
-          // const routingFeatures = parsedRoute.features[0].properties;
+          const routingFeatures = parsedRoute.features[0].properties;
 
           const temp = parsedWeather.current_weather.temperature;
           const weather =
@@ -259,22 +258,22 @@ const handleSearch = () => {
             "weather-condition"
           ).innerHTML = `<img src=${weather} />`;
 
-          // const hours = Math.floor(routingFeatures.summary.duration / 3600);
-          // const minutes = Math.floor(
-          //   (routingFeatures.summary.duration % 3600) / 60
-          // );
-          // const distance =
-          //   (routingFeatures.summary.distance / 1609.344).toFixed(1) + " Miles";
+          const hours = Math.floor(routingFeatures.summary.duration / 3600);
+          const minutes = Math.floor(
+            (routingFeatures.summary.duration % 3600) / 60
+          );
+          const distance =
+            (routingFeatures.summary.distance / 1609.344).toFixed(1) + " Miles";
 
-          // document.getElementById(
-          //   "travel-time"
-          // ).innerHTML = `${hours}hr ${minutes}min`;
-          // document.getElementById("distance").innerHTML = distance;
+          document.getElementById(
+            "travel-time"
+          ).innerHTML = `${hours}hr ${minutes}min`;
+          document.getElementById("distance").innerHTML = distance;
 
-          // console.log(
-          //   parsedRoute,
-          //   "<--------- Route data such as directions, distance and travel time"
-          // ); //<------------------ can use to show directions
+          console.log(
+            parsedRoute,
+            "<--------- Route data such as directions, distance and travel time"
+          ); //<------------------ can use to show directions
         })
         .then(() => {
           const resultsArea = document.getElementById("results");
@@ -303,7 +302,7 @@ const handleSearch = () => {
           loadingScreen.classList.remove("flex");
           loadingScreen.classList.add("hidden");
 
-          // console.log("promise chain err -------> ", err);
+          console.log("promise chain err -------> ", err);
         });
     },
     (error) => {
@@ -379,6 +378,8 @@ const returnHome = () => {
   results.classList.remove("grid");
   backButton.classList.add("hidden");
   searchBox[0].value = "";
+  searchBox[0].classList.add("fade-in-2");
+  searchButton.classList.add("fade-in-3");
 };
 
 searchButton.addEventListener("click", handleSearch);
