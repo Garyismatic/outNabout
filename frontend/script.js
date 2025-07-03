@@ -344,6 +344,7 @@ const showPlaces = (placesArray) => {
     newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
 
     newCard.classList.add("flex");
+    newCard.classList.add('slide')
     document.getElementById("lists").appendChild(newCard);
     imgContainer.appendChild(img);
   });
