@@ -8,6 +8,30 @@ body {
   background-size: 100%;
 }
 
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loader {
+  width: 60px;
+  height: 60px;
+  border: 8px solid lightgrey;
+  border-top: 8px solid #4e30f5;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #app-container {
   max-height: 100dvh;
   max-width: 100dvw;
@@ -80,10 +104,10 @@ body {
 }
 
 .info-box {
-  display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  opacity: 0;
 }
 
 .icon {
@@ -118,6 +142,7 @@ p {
   height: 90px;
   width: 90px;
   margin: 5px auto;
+  opacity: 0;
 }
 
 .back-icon {
@@ -169,4 +194,34 @@ p {
 
 .grid {
   display: grid;
+}
+
+.fade-in-1 {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.fade-in-2 {
+  animation: fadeIn 0.8s ease-out forwards;
+  animation-delay: 0.1s;
+}
+
+.fade-in-3 {
+  animation: fadeIn 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+.fade-in-4 {
+  animation: fadeIn 0.8s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
