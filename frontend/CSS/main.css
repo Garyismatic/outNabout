@@ -5,7 +5,7 @@ body {
   min-height: 100vh;
   background-image: url("./background-img.jpg");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 #loading-screen {
@@ -103,6 +103,7 @@ body {
   min-width: 80%;
   margin: 0px 10px 10px;
   grid-template-columns: 50% 50%;
+  align-items: center;
 }
 
 .info-box {
@@ -110,6 +111,7 @@ body {
   justify-content: space-around;
   align-items: center;
   opacity: 0;
+  min-height: 100%;
 }
 
 .icon {
