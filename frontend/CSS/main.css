@@ -8,6 +8,22 @@ body {
   background-size: cover;
 }
 
+/* display settings */
+
+.hidden {
+  display: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+/* loading screen */
+
 #loading-screen {
   position: fixed;
   inset: 0;
@@ -31,6 +47,8 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* home page */
 
 #app-container {
   max-height: 100dvh;
@@ -98,6 +116,13 @@ body {
   box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.4);
 }
 
+/* results section */
+
+.wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 #results {
   padding: 0px 10px 10px;
   min-width: 80%;
@@ -140,6 +165,7 @@ p {
   flex-wrap: wrap;
   max-width: 400px;
   margin: 10px auto;
+  padding: 20px;
 }
 
 .places-btn {
@@ -148,6 +174,8 @@ p {
   margin: 5px auto;
   opacity: 0;
 }
+
+/* places lists */
 
 .back-icon {
   height: 34px;
@@ -180,6 +208,8 @@ p {
   margin: 0;
 }
 
+/* footer */
+
 #footer {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   padding: 20px;
@@ -188,17 +218,7 @@ p {
   justify-content: space-around;
 }
 
-.hidden {
-  display: none;
-}
-
-.flex {
-  display: flex;
-}
-
-.grid {
-  display: grid;
-}
+/* animations */
 
 .fade-in-1 {
   animation: fadeIn 0.8s ease-out forwards;
