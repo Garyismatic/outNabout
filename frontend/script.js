@@ -9,6 +9,7 @@ const kidsButton = document.getElementById("kids-btn");
 const entertainmentButton = document.getElementById("entertainment-btn");
 const parkingButton = document.getElementById("parking-btn");
 const atmButton = document.getElementById("services-btn");
+const homeButton = document.getElementById("app-title");
 
 const clear = "./CSS/icons/sun.png";
 const mainlyClear = "./CSS/icons/mainly-clear.png";
@@ -104,13 +105,15 @@ const getCategory = (tags) => {
 };
 
 const handleSearch = () => {
-  const resultsArea = document.getElementById("results");
+  const loadingScreen = document.getElementById("loading-screen");
   const userInputArea = document.getElementById("user-input");
 
-  resultsArea.classList.remove("hidden");
-  resultsArea.classList.add("grid");
+  loadingScreen.classList.remove("hidden");
+  loadingScreen.classList.add("flex");
   userInputArea.classList.remove("flex");
   userInputArea.classList.add("hidden");
+  searchBox[0].classList.remove("fade-in-2");
+  searchButton.classList.remove("fade-in-3");
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -241,7 +244,7 @@ const handleSearch = () => {
             return element.tags.amenity === "atm";
           });
 
-          console.log(outdoorSpaces, '<-------- outdoor')
+          console.log(outdoorSpaces, "<-------- outdoor");
 
           const routingFeatures = parsedRoute.features[0].properties;
 
@@ -272,11 +275,40 @@ const handleSearch = () => {
             "<--------- Route data such as directions, distance and travel time"
           ); //<------------------ can use to show directions
         })
+        .then(() => {
+          const resultsArea = document.getElementById("results");
+          const loadingScreen = document.getElementById("loading-screen");
+          const weatherBtn = document.getElementById("weather-info");
+          const travelBtn = document.getElementById("travel-info");
+
+          loadingScreen.classList.add("hidden");
+          loadingScreen.classList.remove("flex");
+          resultsArea.classList.remove("hidden");
+          resultsArea.classList.add("grid");
+
+          weatherBtn.classList.add("fade-in-1");
+          travelBtn.classList.add("fade-in-2");
+          foodButton.classList.add("fade-in-1");
+          barsButton.classList.add("fade-in-2");
+          outdoorButton.classList.add("fade-in-3");
+          indoorButton.classList.add("fade-in-2");
+          kidsButton.classList.add("fade-in-3");
+          entertainmentButton.classList.add("fade-in-4");
+          parkingButton.classList.add("fade-in-3");
+          atmButton.classList.add("fade-in-4");
+        })
         .catch((err) => {
+          const loadingScreen = document.getElementById("loading-screen");
+          loadingScreen.classList.remove("flex");
+          loadingScreen.classList.add("hidden");
+
           console.log("promise chain err -------> ", err);
         });
     },
     (error) => {
+      const loadingScreen = document.getElementById("loading-screen");
+      loadingScreen.classList.remove("flex");
+      loadingScreen.classList.add("hidden");
       console.log("getCurrPos Err --- >", error);
     }
   );
@@ -313,6 +345,7 @@ const showPlaces = (placesArray) => {
     newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
 
     newCard.classList.add("flex");
+    newCard.classList.add("slide");
     document.getElementById("lists").appendChild(newCard);
     imgContainer.appendChild(img);
   });
@@ -331,6 +364,22 @@ const handleReturn = () => {
   results.classList.remove("hidden");
   lists.classList.add("hidden");
   backButton.classList.add("hidden");
+};
+
+const returnHome = () => {
+  const homeScreen = document.getElementById("user-input");
+  const results = document.getElementById("results");
+  const list = document.getElementById("lists");
+
+  results.classList.add("hidden");
+  list.classList.add("hidden");
+  homeScreen.classList.remove("hidden");
+  homeScreen.classList.add("flex");
+  results.classList.remove("grid");
+  backButton.classList.add("hidden");
+  searchBox[0].value = "";
+  searchBox[0].classList.add("fade-in-2");
+  searchButton.classList.add("fade-in-3");
 };
 
 searchButton.addEventListener("click", handleSearch);
@@ -359,3 +408,4 @@ parkingButton.addEventListener("click", (e) => {
 atmButton.addEventListener("click", (e) => {
   showPlaces(services);
 });
+homeButton.addEventListener("click", returnHome);
