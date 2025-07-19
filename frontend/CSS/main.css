@@ -1,15 +1,21 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   padding: 0;
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
   background-image: url("./background-img.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-* {
-  box-sizing: border-box;
 }
 
 /* display settings */
@@ -138,7 +144,8 @@ body {
 #results {
   padding: 0px 10px 10px;
   min-width: 80%;
-  margin: 0px 10px 10px;
+  max-width: 600px;
+  margin: 0px auto;
   grid-template-columns: 50% 50%;
   align-items: center;
 }
