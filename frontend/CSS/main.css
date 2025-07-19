@@ -95,9 +95,10 @@ body {
 #user-input {
   flex-direction: column;
   justify-content: space-around;
+  gap: 3rem;
   align-items: center;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 5rem auto;
 }
 
 #destination {
@@ -105,8 +106,27 @@ body {
   padding: 15px;
   margin: 30px auto;
   border-radius: 20px;
+  border: deepskyblue solid 2px;
   text-align: center;
   width: 100%;
+  background: transparent;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+}
+
+#destination::placeholder {
+  color: rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 2px white;
+}
+
+#destination:focus {
+  outline: none;
+  border-color: deepskyblue;
+  box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.4);
+}
+
+#destination:focus::placeholder {
+  color: transparent;
 }
 
 .misty-container {
@@ -185,6 +205,18 @@ p {
   width: 64px;
   margin: 5px auto;
   opacity: 0;
+}
+
+@media (min-width: 450px) {
+  .icon {
+    height: 64px;
+    width: 64px;
+  }
+
+  .places-btn {
+    height: 90px;
+    width: 90px;
+  }
 }
 
 /* places lists */
