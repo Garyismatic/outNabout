@@ -107,11 +107,14 @@ const getCategory = (tags) => {
 const handleSearch = () => {
   const loadingScreen = document.getElementById("loading-screen");
   const userInputArea = document.getElementById("user-input");
+  const footer = document.getElementById("footer");
 
   loadingScreen.classList.remove("hidden");
   loadingScreen.classList.add("flex");
   userInputArea.classList.remove("flex");
   userInputArea.classList.add("hidden");
+  footer.classList.remove("flex");
+  footer.classList.add("hidden");
   searchBox[0].classList.remove("fade-in-2");
   searchButton.classList.remove("fade-in-3");
 
@@ -370,7 +373,10 @@ const returnHome = () => {
   const homeScreen = document.getElementById("user-input");
   const results = document.getElementById("results");
   const list = document.getElementById("lists");
+  const footer = document.getElementById("footer");
 
+  footer.classList.remove("hidden");
+  footer.classList.add("flex");
   results.classList.add("hidden");
   list.classList.add("hidden");
   homeScreen.classList.remove("hidden");
