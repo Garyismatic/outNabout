@@ -356,6 +356,7 @@ const showPlaces = (placesArray) => {
   results.classList.add("hidden");
   results.classList.remove("grid");
   lists.classList.remove("hidden");
+  lists.classList.add("grid");
   backButton.classList.remove("hidden");
 };
 
@@ -366,6 +367,7 @@ const handleReturn = () => {
   results.classList.add("grid");
   results.classList.remove("hidden");
   lists.classList.add("hidden");
+  lists.classList.remove("grid");
   backButton.classList.add("hidden");
 };
 
@@ -379,6 +381,7 @@ const returnHome = () => {
   footer.classList.add("flex");
   results.classList.add("hidden");
   list.classList.add("hidden");
+  list.classList.remove("grid");
   homeScreen.classList.remove("hidden");
   homeScreen.classList.add("flex");
   results.classList.remove("grid");

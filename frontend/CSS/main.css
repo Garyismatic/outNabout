@@ -137,14 +137,12 @@ body {
 /* results section */
 
 .wrapper {
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 #results {
   padding: 0px 10px 10px;
-  min-width: 80%;
-  max-width: 600px;
   margin: 0px auto;
   grid-template-columns: 50% 50%;
   align-items: center;
@@ -165,12 +163,6 @@ body {
 
 p {
   text-align: center;
-}
-
-.label {
-  font-family: "yellowtail", cursive;
-  font-size: 22px;
-  font-weight: 100;
 }
 
 .sans {
@@ -197,16 +189,24 @@ p {
 
 /* places lists */
 
+#lists {
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin: 0 5px;
+}
+
 .back-icon {
   height: 34px;
   width: 34px;
+  margin: 0;
 }
 
 .list-card {
   justify-content: space-between;
   align-items: center;
-  min-width: 80%;
+  min-width: 100%;
   max-width: 550px;
+  margin: 5px auto 0;
 }
 
 .list-item-img,
@@ -215,7 +215,7 @@ p {
 }
 
 .list-item-name {
-  font-size: 1.6em;
+  font-size: 1em;
 }
 
 .list-item-subtext {
