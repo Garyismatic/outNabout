@@ -106,7 +106,7 @@ body {
   padding: 15px;
   margin: 30px auto;
   border-radius: 20px;
-  border: deepskyblue solid 2px;
+  border: deepskyblue 1px solid;
   text-align: center;
   width: 100%;
   background: transparent;
@@ -122,7 +122,12 @@ body {
 #destination:focus {
   outline: none;
   border-color: deepskyblue;
-  box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.4);
+  box-shadow: 0 0 50px 15px rgba(0, 191, 255, 0.4);
+}
+
+#destination:hover {
+  border-color: deepskyblue;
+  box-shadow: 0 0 50px 15px rgba(0, 191, 255, 0.4);
 }
 
 #destination:focus::placeholder {
@@ -146,12 +151,20 @@ body {
 #search-button {
   opacity: 0;
   margin: 50px auto;
-  padding: 30px;
+  padding: 20px;
   border: none;
   border-radius: 100%;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#search-button:hover {
+  box-shadow: 0 0 50px 15px rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(4px);
-  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.4);
+}
+
+#search-button:focus {
+  outline: none;
+  padding: 35px;
 }
 
 /* results section */
