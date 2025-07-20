@@ -244,6 +244,15 @@ p {
 
 /* places lists */
 
+#list-options {
+  justify-content: space-between;
+}
+
+#filter {
+  min-width: 50%;
+  text-align: right;
+}
+
 #lists {
   grid-template-columns: 1fr;
   gap: 0.5rem;

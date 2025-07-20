@@ -10,6 +10,7 @@ const entertainmentButton = document.getElementById("entertainment-btn");
 const parkingButton = document.getElementById("parking-btn");
 const atmButton = document.getElementById("services-btn");
 const homeButton = document.getElementById("app-title");
+const filter = document.getElementById("filter");
 
 const clear = "./CSS/icons/sun.png";
 const mainlyClear = "./CSS/icons/mainly-clear.png";
@@ -95,6 +96,7 @@ let kidsActivities = [];
 let entertainmentVenues = [];
 let parkingPlaces = [];
 let services = [];
+let currentPlaces = [];
 
 const getCategory = (tags) => {
   const tagList = ["amenity", "leisure", "tourism", "natural", "historic"];
@@ -318,15 +320,48 @@ const handleSearch = () => {
 };
 
 const showPlaces = (placesArray) => {
+  currentPlaces = placesArray;
   const results = document.getElementById("results");
   const lists = document.getElementById("lists");
+  const listOptions = document.getElementById("list-options");
+  const filter = document.getElementById("filter");
 
   lists.innerHTML = "";
+  filter.innerHTML = "";
+
+  const placeTypes = new Set();
+  placesArray.forEach(({ tags }) => {
+    if (tags.amenity) placeTypes.add(tags.amenity);
+    if (tags.leisure) placeTypes.add(tags.leisure);
+    if (tags.tourism) placeTypes.add(tags.tourism);
+    if (tags.natural) placeTypes.add(tags.natural);
+    if (tags.historic) placeTypes.add(tags.historic);
+  });
+
+  const filterPlaceholder = document.createElement("option");
+  filterPlaceholder.value = "All";
+  filterPlaceholder.textContent = "All";
+  filterPlaceholder.selected = true;
+  filter.appendChild(filterPlaceholder);
+
+  const placeTypesArray = [...placeTypes];
+
+  placeTypesArray.forEach((type) => {
+    const typeString = type.replaceAll("_", " ").replace(/^\w/, (letter) => {
+      return letter.toUpperCase();
+    });
+
+    const filterType = document.createElement("option");
+    filterType.value = typeString;
+    filterType.textContent = typeString;
+    filter.appendChild(filterType);
+  });
 
   let temp, card, newCard;
 
   temp = document.getElementsByTagName("template")[0];
   card = temp.content.querySelector(".list-card");
+
   placesArray.forEach((place) => {
     newCard = document.importNode(card, true);
 
@@ -353,22 +388,73 @@ const showPlaces = (placesArray) => {
     imgContainer.appendChild(img);
   });
 
+  listOptions.classList.remove("hidden");
+  listOptions.classList.add("flex");
   results.classList.add("hidden");
   results.classList.remove("grid");
   lists.classList.remove("hidden");
   lists.classList.add("grid");
-  backButton.classList.remove("hidden");
+  filter.classList.remove("hidden");
+  if (placeTypesArray.length <= 1) filter.classList.add("hidden");
+};
+
+const filterPlaces = (selectedType) => {
+  const lists = document.getElementById("lists");
+
+  lists.innerHTML = "";
+
+  const filteredList =
+    selectedType === "All"
+      ? currentPlaces
+      : currentPlaces.filter(({ tags }) => {
+          return (
+            tags.amenity === selectedType.toLowerCase().replaceAll(" ", "_") ||
+            tags.leisure === selectedType.toLowerCase().replaceAll(" ", "_") ||
+            tags.tourism === selectedType.toLowerCase().replaceAll(" ", "_") ||
+            tags.natural === selectedType.toLowerCase().replaceAll(" ", "_") ||
+            tags.historic === selectedType.toLowerCase().replaceAll(" ", "_")
+          );
+        });
+
+  const temp = document.getElementsByTagName("template")[0];
+  const card = temp.content.querySelector(".list-card");
+
+  filteredList.forEach((place) => {
+    const newCard = document.importNode(card, true);
+    const { category } = getCategory(place.tags);
+
+    const imgContainer = newCard.querySelector(".list-item-img");
+    const img = document.createElement("img");
+
+    img.src = `./CSS/icons/${category}.png`;
+    img.alt = `${place.tags.amenity} icon`;
+    img.classList.add("icon");
+
+    const placeName = place.tags.name || place.tags.brand || place.tags.amenity;
+
+    const street = place.tags["addr:street"] || "";
+    const postcode = place.tags["addr:postcode"] || "";
+
+    newCard.getElementsByTagName("h2")[0].textContent = placeName;
+    newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
+    newCard.classList.add("flex", "slide");
+
+    imgContainer.appendChild(img);
+    lists.appendChild(newCard);
+  });
 };
 
 const handleReturn = () => {
   const lists = document.getElementById("lists");
   const results = document.getElementById("results");
+  const listOptions = document.getElementById("list-options");
 
   results.classList.add("grid");
   results.classList.remove("hidden");
   lists.classList.add("hidden");
   lists.classList.remove("grid");
-  backButton.classList.add("hidden");
+  listOptions.classList.remove("flex");
+  listOptions.classList.add("hidden");
 };
 
 const returnHome = () => {
@@ -376,7 +462,10 @@ const returnHome = () => {
   const results = document.getElementById("results");
   const list = document.getElementById("lists");
   const footer = document.getElementById("footer");
+  const listOptions = document.getElementById("list-options");
 
+  listOptions.classList.add("hidden");
+  listOptions.classList.remove("flex");
   footer.classList.remove("hidden");
   footer.classList.add("flex");
   results.classList.add("hidden");
@@ -385,7 +474,6 @@ const returnHome = () => {
   homeScreen.classList.remove("hidden");
   homeScreen.classList.add("flex");
   results.classList.remove("grid");
-  backButton.classList.add("hidden");
   searchBox[0].value = "";
   searchBox[0].classList.add("fade-in-2");
   searchButton.classList.add("fade-in-3");
@@ -418,3 +506,7 @@ atmButton.addEventListener("click", (e) => {
   showPlaces(services);
 });
 homeButton.addEventListener("click", returnHome);
+filter.addEventListener("change", (e) => {
+  const selectedType = e.target.value;
+  filterPlaces(selectedType);
+});
