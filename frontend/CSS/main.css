@@ -213,6 +213,16 @@ p {
   padding: 20px;
 }
 
+.group-buttons {
+  grid-column: span 3;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.group-buttons button {
+  margin: 0;
+}
+
 .places-btn {
   height: 64px;
   width: 64px;
