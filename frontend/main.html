@@ -27,7 +27,7 @@
           id="destination"
           class="fade-in-2"
           name="destination"
-          placeholder="City Destination"
+          placeholder="Search City"
         />
         <button id="search-button" class="fade-in-3">
           <img src="./CSS/icons/search.png" id="search-icon" />
@@ -93,33 +93,42 @@
               class="icon"
             />
           </button>
-          <button id="parking-btn" class="places-btn misty-container">
-            <img
-              src="./CSS/icons/parking.png"
-              alt="Parking Icon"
-              class="icon"
-            />
-          </button>
-          <button id="services-btn" class="places-btn misty-container">
-            <img src="./CSS/icons/atm.png" alt="Services Icon" class="icon" />
-          </button>
+          <div class="flex group-buttons">
+            <button id="parking-btn" class="places-btn misty-container">
+              <img
+                src="./CSS/icons/parking.png"
+                alt="Parking Icon"
+                class="icon"
+              />
+            </button>
+            <button id="services-btn" class="places-btn misty-container">
+              <img src="./CSS/icons/atm.png" alt="Services Icon" class="icon" />
+            </button>
+          </div>
         </section>
       </section>
       <template>
         <section class="list-card misty-container">
           <section class="list-item-img"></section>
           <section class="list-text-container">
-            <h2 class="list-item-name list-text label"></h2>
+            <h2 class="list-item-name list-text sans"></h2>
             <p class="list-item-subtext list-text sans"></p>
           </section>
         </section>
       </template>
-      <button id="return-btn" class="misty-container hidden">
-        <img src="./CSS/icons/back.png" alt="return arrow" class="back-icon" />
-      </button>
+      <div id="list-options" class="hidden">
+        <button id="return-btn" class="misty-container">
+          <img
+            src="./CSS/icons/back.png"
+            alt="return arrow"
+            class="back-icon"
+          />
+        </button>
+        <select id="filter" class="sans misty-container"></select>
+      </div>
       <section id="lists" class="hidden"></section>
     </div>
-    <section id="footer">
+    <section id="footer" class="flex">
       <h5 id="my-name">Gary Evans</h5>
     </section>
   </body>
