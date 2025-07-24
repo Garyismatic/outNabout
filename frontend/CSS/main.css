@@ -345,3 +345,9 @@ p {
     transform: translateY(0);
   }
 }
+
+/* leaflet css */
+
+#map {
+  height: 240px;
+}
