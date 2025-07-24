@@ -1,3 +1,16 @@
+import {
+  getList,
+  getCategory,
+  filterPlaces,
+  getService,
+  returnHome,
+  handleReturn,
+} from "./utils.js"; // seperate functions from main javaScript file
+
+import { typeArrays, weatherCode } from "./data.js"; // seperate data for easier readability
+
+// Below I target the sections in html to switch between visible and hidden depending on functionality used
+
 const searchBox = document.getElementsByName("destination");
 const searchButton = document.getElementById("search-button");
 const backButton = document.getElementById("return-btn");
@@ -11,82 +24,14 @@ const parkingButton = document.getElementById("parking-btn");
 const atmButton = document.getElementById("services-btn");
 const homeButton = document.getElementById("app-title");
 const filter = document.getElementById("filter");
+const loadingScreen = document.getElementById("loading-screen");
+const resultsArea = document.getElementById("results");
+const lists = document.getElementById("lists");
+const userInputArea = document.getElementById("user-input");
+const listOptions = document.getElementById("list-options");
+const footer = document.getElementById("footer");
 
-const clear = "./CSS/icons/sun.png";
-const mainlyClear = "./CSS/icons/mainly-clear.png";
-const overcast = "./CSS/icons/overcast.png";
-const fog = "./CSS/icons/fog.png";
-const lightRain = "./CSS/icons/light-rain.png";
-const rain = "./CSS/icons/rain.png";
-const sleet = "./CSS/icons/sleet.png";
-const lightSnow = "./CSS/icons/light-snow.png";
-const snow = "./CSS/icons/snow.png";
-const thunderstorm = "./CSS/icons/thunderstorm.png";
-
-let search = "";
-
-const weatherCode = {
-  0: clear,
-  1: mainlyClear,
-  2: mainlyClear,
-  3: overcast,
-  45: fog,
-  48: fog,
-  51: lightRain,
-  53: lightRain,
-  55: rain,
-  56: sleet,
-  57: sleet,
-  61: lightRain,
-  63: rain,
-  65: rain,
-  66: sleet,
-  67: sleet,
-  71: lightSnow,
-  73: snow,
-  75: snow,
-  77: lightSnow,
-  80: lightRain,
-  81: rain,
-  82: rain,
-  85: lightSnow,
-  86: snow,
-  95: thunderstorm,
-  96: thunderstorm,
-  99: thunderstorm,
-};
-
-const foodAmenity = ["restaurant", "fast_food", "cafe"];
-const outdoorAmenity = [
-  "park",
-  "nature_reserve",
-  "wood",
-  "beach",
-  "cliff",
-  "memorial",
-  "monument",
-  "ruins",
-  "viewpoint",
-];
-const indoorAmenities = [
-  "artwork",
-  "escape_game",
-  "museum",
-  "amusement_arcade",
-];
-const kidsAmenities = [
-  "amusement_arcade",
-  "playground",
-  "water_park",
-  "museum",
-  "park",
-];
-const entertainmentAmenities = [
-  "amusement_arcade",
-  "escape_game",
-  "water_park",
-  "attraction",
-];
+// below initialise the places arrays ready to be populated once search is completed, and then called on depending which event listener is triggered
 
 let foodPlaces = [];
 let bars = [];
@@ -98,27 +43,15 @@ let parkingPlaces = [];
 let services = [];
 let currentPlaces = [];
 
-const getCategory = (tags) => {
-  const tagList = ["amenity", "leisure", "tourism", "natural", "historic"];
-  for (let tag of tagList) {
-    if (tags[tag]) return { type: "tag", category: tags[tag] };
-  }
-  return { type: "unknown", category: "default" };
-};
-
 const handleSearch = () => {
-  const loadingScreen = document.getElementById("loading-screen");
-  const userInputArea = document.getElementById("user-input");
-  const footer = document.getElementById("footer");
-
   loadingScreen.classList.remove("hidden");
   loadingScreen.classList.add("flex");
   userInputArea.classList.remove("flex");
   userInputArea.classList.add("hidden");
   footer.classList.remove("flex");
   footer.classList.add("hidden");
-  searchBox[0].classList.remove("fade-in-2");
-  searchButton.classList.remove("fade-in-3");
+
+  //get a users current position to calculate distance and time to destination declared in the search box
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -126,7 +59,7 @@ const handleSearch = () => {
       const userLong = position.coords.longitude;
 
       const start = `${userLong},${userLat}`;
-      search = searchBox[0].value;
+      const search = searchBox[0].value;
 
       fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${search}`)
         .then((res) => {
@@ -135,10 +68,11 @@ const handleSearch = () => {
         .then((coordinates) => {
           console.log(coordinates, "<----- Destination search results"); //<-------- use for a comprehensive list of cities
 
-          const result = coordinates.results[0];
+          const result = coordinates.results[0]; //select the first location in the array of possibilities
 
-          const county = result.admin2 || "";
-          const city = result.name;
+          const county = result.admin2 || ""; // if a county is not present default is blank
+
+          const city = result.name; //confirm to the user they are looking at the correct destination
 
           const { latitude, longitude } = coordinates.results[0];
 
@@ -152,13 +86,13 @@ const handleSearch = () => {
               node["historic"~"memorial|monument|ruins"](around:1000,${latitude},${longitude});
             );
             out body;
-            `;
+            `; // overpass own QL as referenced in their docs
 
           if (city !== county) {
             document.getElementById("city").innerHTML = city + " " + county;
           } else {
             document.getElementById("city").innerHTML = city;
-          }
+          } // conditional statement to avoid listing the destination twice to improve ux
 
           const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
           const routeURL = `/api/route?start=${start}&end=${longitude},${latitude}`;
@@ -182,9 +116,11 @@ const handleSearch = () => {
         .then(([parsedWeather, parsedRoute, parsedPlaces]) => {
           console.log(parsedPlaces, "<------- all of the places found"); // <------------ logging the places data to help decide how to use the method filter on the array and object properties to display them in groups.
 
+          // below the function starts populating the arrays of places declared at the start.
+
           foodPlaces = parsedPlaces.elements.filter((element) => {
             return (
-              foodAmenity.includes(element.tags.amenity) &&
+              typeArrays.foodAmenity.includes(element.tags.amenity) &&
               element.tags["fhrs:id"]
             );
           });
@@ -193,87 +129,48 @@ const handleSearch = () => {
             return element.tags.amenity === "bar" && element.tags["fhrs:id"];
           });
 
-          outdoorSpaces = parsedPlaces.elements.filter((element) => {
-            return (
-              element.tags.name &&
-              outdoorAmenity.includes(
-                element.tags.leisure ||
-                  element.tags.tourism ||
-                  element.tags.natural ||
-                  element.tags.historic
-              )
-            );
-          });
+          outdoorSpaces = getList(typeArrays.outdoorAmenity, parsedPlaces);
 
-          indoorAttractions = parsedPlaces.elements.filter((element) => {
-            return (
-              element.tags.name &&
-              indoorAmenities.includes(
-                element.tags.leisure ||
-                  element.tags.tourism ||
-                  element.tags.natural ||
-                  element.tags.historic
-              )
-            );
-          });
+          indoorAttractions = getList(typeArrays.indoorAmenities, parsedPlaces);
 
-          kidsActivities = parsedPlaces.elements.filter((element) => {
-            return (
-              element.tags.name &&
-              kidsAmenities.includes(
-                element.tags.leisure ||
-                  element.tags.tourism ||
-                  element.tags.natural ||
-                  element.tags.historic
-              )
-            );
-          });
+          kidsActivities = getList(typeArrays.kidsAmenities, parsedPlaces);
 
-          entertainmentVenues = parsedPlaces.elements.filter((element) => {
-            return (
-              element.tags.name &&
-              entertainmentAmenities.includes(
-                element.tags.leisure ||
-                  element.tags.tourism ||
-                  element.tags.natural ||
-                  element.tags.historic
-              )
-            );
-          });
+          entertainmentVenues = getList(
+            typeArrays.entertainmentAmenities,
+            parsedPlaces
+          );
 
-          parkingPlaces = parsedPlaces.elements.filter((element) => {
-            return element.tags.amenity === "parking";
-          });
+          parkingPlaces = getService("parking", parsedPlaces);
 
-          services = parsedPlaces.elements.filter((element) => {
-            return element.tags.amenity === "atm";
-          });
+          services = getService("atm", parsedPlaces);
 
-          console.log(outdoorSpaces, "<-------- outdoor");
-
-          const routingFeatures = parsedRoute.features[0].properties;
+          const routingFeatures = parsedRoute.features[0].properties; // declare a variable to easily access distance and time from the response of the openrouteService API
 
           const temp = parsedWeather.current_weather.temperature;
+
           const weather =
-            weatherCode[parsedWeather.current_weather.weathercode];
+            weatherCode[parsedWeather.current_weather.weathercode]; // set the icon dynamically based on the weather code in the response compared to the key value pairs in data.js
+
           const tempUnits = parsedWeather.current_weather_units.temperature;
 
           document.getElementById("temp").innerHTML = temp + " " + tempUnits;
           document.getElementById(
             "weather-condition"
-          ).innerHTML = `<img src=${weather} />`;
+          ).innerHTML = `<img src=${weather} />`; // set the values in the weather tile of the app
 
-          const hours = Math.floor(routingFeatures.summary.duration / 3600);
+          const hours = Math.floor(routingFeatures.summary.duration / 3600); // The response for time is in seconds, here we convert it to hours
+
           const minutes = Math.floor(
             (routingFeatures.summary.duration % 3600) / 60
-          );
+          ); // finding the remaining seconds that do not equate to a full hour and converting them to minutes rounding down
+
           const distance =
-            (routingFeatures.summary.distance / 1609.344).toFixed(1) + " Miles";
+            (routingFeatures.summary.distance / 1609.344).toFixed(1) + " Miles"; // convert km to miles
 
           document.getElementById(
             "travel-time"
           ).innerHTML = `${hours}hr ${minutes}min`;
-          document.getElementById("distance").innerHTML = distance;
+          document.getElementById("distance").innerHTML = distance; // set the values in the travel tile of the app
 
           console.log(
             parsedRoute,
@@ -281,8 +178,8 @@ const handleSearch = () => {
           ); //<------------------ can use to show directions
         })
         .then(() => {
-          const resultsArea = document.getElementById("results");
-          const loadingScreen = document.getElementById("loading-screen");
+          // Async functions should now be complete and ready to display to the user with places pre loaded ready to filter.
+
           const weatherBtn = document.getElementById("weather-info");
           const travelBtn = document.getElementById("travel-info");
 
@@ -303,7 +200,6 @@ const handleSearch = () => {
           atmButton.classList.add("fade-in-4");
         })
         .catch((err) => {
-          const loadingScreen = document.getElementById("loading-screen");
           loadingScreen.classList.remove("flex");
           loadingScreen.classList.add("hidden");
 
@@ -311,7 +207,6 @@ const handleSearch = () => {
         });
     },
     (error) => {
-      const loadingScreen = document.getElementById("loading-screen");
       loadingScreen.classList.remove("flex");
       loadingScreen.classList.add("hidden");
       console.log("getCurrPos Err --- >", error);
@@ -321,9 +216,6 @@ const handleSearch = () => {
 
 const showPlaces = (placesArray) => {
   currentPlaces = placesArray;
-  const results = document.getElementById("results");
-  const lists = document.getElementById("lists");
-  const listOptions = document.getElementById("list-options");
   const filter = document.getElementById("filter");
 
   lists.innerHTML = "";
@@ -338,23 +230,23 @@ const showPlaces = (placesArray) => {
     if (tags.historic) placeTypes.add(tags.historic);
   });
 
-  const filterPlaceholder = document.createElement("option");
-  filterPlaceholder.value = "All";
-  filterPlaceholder.textContent = "All";
-  filterPlaceholder.selected = true;
-  filter.appendChild(filterPlaceholder);
+  const filterDefault = document.createElement("option");
+  filterDefault.value = "All";
+  filterDefault.textContent = "All";
+  filterDefault.selected = true;
+  filter.appendChild(filterDefault);
 
-  const placeTypesArray = [...placeTypes];
+  const placeTypesArray = [...placeTypes]; // spread the set into an array here to use array methods
 
   placeTypesArray.forEach((type) => {
     const typeString = type.replaceAll("_", " ").replace(/^\w/, (letter) => {
       return letter.toUpperCase();
-    });
+    }); // Formatting the text to be more user friendly in the filter drop down box
 
     const filterType = document.createElement("option");
     filterType.value = typeString;
     filterType.textContent = typeString;
-    filter.appendChild(filterType);
+    filter.appendChild(filterType); // once formatted add to the filter options
   });
 
   let temp, card, newCard;
@@ -384,103 +276,24 @@ const showPlaces = (placesArray) => {
 
     newCard.classList.add("flex");
     newCard.classList.add("slide");
-    document.getElementById("lists").appendChild(newCard);
+    lists.appendChild(newCard);
     imgContainer.appendChild(img);
   });
 
   listOptions.classList.remove("hidden");
   listOptions.classList.add("flex");
-  results.classList.add("hidden");
-  results.classList.remove("grid");
+  resultsArea.classList.add("hidden");
+  resultsArea.classList.remove("grid");
   lists.classList.remove("hidden");
   lists.classList.add("grid");
   filter.classList.remove("hidden");
   if (placeTypesArray.length <= 1) filter.classList.add("hidden");
 };
 
-const filterPlaces = (selectedType) => {
-  const lists = document.getElementById("lists");
-
-  lists.innerHTML = "";
-
-  const filteredList =
-    selectedType === "All"
-      ? currentPlaces
-      : currentPlaces.filter(({ tags }) => {
-          return (
-            tags.amenity === selectedType.toLowerCase().replaceAll(" ", "_") ||
-            tags.leisure === selectedType.toLowerCase().replaceAll(" ", "_") ||
-            tags.tourism === selectedType.toLowerCase().replaceAll(" ", "_") ||
-            tags.natural === selectedType.toLowerCase().replaceAll(" ", "_") ||
-            tags.historic === selectedType.toLowerCase().replaceAll(" ", "_")
-          );
-        });
-
-  const temp = document.getElementsByTagName("template")[0];
-  const card = temp.content.querySelector(".list-card");
-
-  filteredList.forEach((place) => {
-    const newCard = document.importNode(card, true);
-    const { category } = getCategory(place.tags);
-
-    const imgContainer = newCard.querySelector(".list-item-img");
-    const img = document.createElement("img");
-
-    img.src = `./CSS/icons/${category}.png`;
-    img.alt = `${place.tags.amenity} icon`;
-    img.classList.add("icon");
-
-    const placeName = place.tags.name || place.tags.brand || place.tags.amenity;
-
-    const street = place.tags["addr:street"] || "";
-    const postcode = place.tags["addr:postcode"] || "";
-
-    newCard.getElementsByTagName("h2")[0].textContent = placeName;
-    newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
-    newCard.classList.add("flex", "slide");
-
-    imgContainer.appendChild(img);
-    lists.appendChild(newCard);
-  });
-};
-
-const handleReturn = () => {
-  const lists = document.getElementById("lists");
-  const results = document.getElementById("results");
-  const listOptions = document.getElementById("list-options");
-
-  results.classList.add("grid");
-  results.classList.remove("hidden");
-  lists.classList.add("hidden");
-  lists.classList.remove("grid");
-  listOptions.classList.remove("flex");
-  listOptions.classList.add("hidden");
-};
-
-const returnHome = () => {
-  const homeScreen = document.getElementById("user-input");
-  const results = document.getElementById("results");
-  const list = document.getElementById("lists");
-  const footer = document.getElementById("footer");
-  const listOptions = document.getElementById("list-options");
-
-  listOptions.classList.add("hidden");
-  listOptions.classList.remove("flex");
-  footer.classList.remove("hidden");
-  footer.classList.add("flex");
-  results.classList.add("hidden");
-  list.classList.add("hidden");
-  list.classList.remove("grid");
-  homeScreen.classList.remove("hidden");
-  homeScreen.classList.add("flex");
-  results.classList.remove("grid");
-  searchBox[0].value = "";
-  searchBox[0].classList.add("fade-in-2");
-  searchButton.classList.add("fade-in-3");
-};
-
 searchButton.addEventListener("click", handleSearch);
-backButton.addEventListener("click", handleReturn);
+backButton.addEventListener("click", (e) => {
+  handleReturn(resultsArea, lists, listOptions);
+});
 foodButton.addEventListener("click", (e) => {
   showPlaces(foodPlaces);
 });
@@ -505,8 +318,18 @@ parkingButton.addEventListener("click", (e) => {
 atmButton.addEventListener("click", (e) => {
   showPlaces(services);
 });
-homeButton.addEventListener("click", returnHome);
+homeButton.addEventListener("click", (e) => {
+  returnHome(
+    listOptions,
+    footer,
+    resultsArea,
+    lists,
+    userInputArea,
+    searchBox,
+    searchButton
+  );
+});
 filter.addEventListener("change", (e) => {
   const selectedType = e.target.value;
-  filterPlaces(selectedType);
+  filterPlaces(selectedType, currentPlaces);
 });
