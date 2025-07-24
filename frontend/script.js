@@ -5,6 +5,9 @@ import {
   getService,
   returnHome,
   handleReturn,
+  createList,
+  createFilter,
+  getFilterTypes,
 } from "./utils.js"; // seperate functions from main javaScript file
 
 import { typeArrays, weatherCode } from "./data.js"; // seperate data for easier readability
@@ -215,70 +218,18 @@ const handleSearch = () => {
 };
 
 const showPlaces = (placesArray) => {
-  currentPlaces = placesArray;
+  currentPlaces = [...placesArray];
+
   const filter = document.getElementById("filter");
 
   lists.innerHTML = "";
   filter.innerHTML = "";
 
-  const placeTypes = new Set();
-  placesArray.forEach(({ tags }) => {
-    if (tags.amenity) placeTypes.add(tags.amenity);
-    if (tags.leisure) placeTypes.add(tags.leisure);
-    if (tags.tourism) placeTypes.add(tags.tourism);
-    if (tags.natural) placeTypes.add(tags.natural);
-    if (tags.historic) placeTypes.add(tags.historic);
-  });
+  const { length, types } = getFilterTypes(placesArray);
+  createFilter(types);
+  createList(placesArray);
 
-  const filterDefault = document.createElement("option");
-  filterDefault.value = "All";
-  filterDefault.textContent = "All";
-  filterDefault.selected = true;
-  filter.appendChild(filterDefault);
-
-  const placeTypesArray = [...placeTypes]; // spread the set into an array here to use array methods
-
-  placeTypesArray.forEach((type) => {
-    const typeString = type.replaceAll("_", " ").replace(/^\w/, (letter) => {
-      return letter.toUpperCase();
-    }); // Formatting the text to be more user friendly in the filter drop down box
-
-    const filterType = document.createElement("option");
-    filterType.value = typeString;
-    filterType.textContent = typeString;
-    filter.appendChild(filterType); // once formatted add to the filter options
-  });
-
-  let temp, card, newCard;
-
-  temp = document.getElementsByTagName("template")[0];
-  card = temp.content.querySelector(".list-card");
-
-  placesArray.forEach((place) => {
-    newCard = document.importNode(card, true);
-
-    const { category } = getCategory(place.tags);
-
-    const imgContainer = newCard.querySelector(".list-item-img");
-    const img = document.createElement("img");
-
-    img.src = `./CSS/icons/${category}.png`;
-    img.alt = `${place.tags.amenity} icon`;
-    img.classList.add("icon");
-
-    const placeName = place.tags.name || place.tags.brand || place.tags.amenity;
-
-    const street = place.tags["addr:street"] || "";
-    const postcode = place.tags["addr:postcode"] || "";
-
-    newCard.getElementsByTagName("h2")[0].textContent = placeName;
-    newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
-
-    newCard.classList.add("flex");
-    newCard.classList.add("slide");
-    lists.appendChild(newCard);
-    imgContainer.appendChild(img);
-  });
+  // once all iterations within the functions are complete change display settings for user
 
   listOptions.classList.remove("hidden");
   listOptions.classList.add("flex");
@@ -287,7 +238,8 @@ const showPlaces = (placesArray) => {
   lists.classList.remove("hidden");
   lists.classList.add("grid");
   filter.classList.remove("hidden");
-  if (placeTypesArray.length <= 1) filter.classList.add("hidden");
+
+  if (length <= 1) filter.classList.add("hidden"); // if there is only one type of place such as parking / atm or bar then there is no need for a filter option.
 };
 
 searchButton.addEventListener("click", handleSearch);
