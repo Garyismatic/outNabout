@@ -28,7 +28,7 @@ export function getCategory(tags) {
   }
 }
 
-export function filterPlaces(selectedType, currentPlaces) {
+export function filterPlaces(selectedType, currentPlacesInView) {
   // This function will empty out the current list of places shown and re populate it with places associated with the selected type such as cafe, restaurant or amusement arcade and use the same process of creating new cards using the html template
 
   lists.innerHTML = "";
@@ -37,8 +37,8 @@ export function filterPlaces(selectedType, currentPlaces) {
 
   const filteredList =
     selectedType === "All"
-      ? currentPlaces
-      : currentPlaces.filter(({ tags }) => {
+      ? currentPlacesInView
+      : currentPlacesInView.filter(({ tags }) => {
           return (
             tags.amenity === selectedType.toLowerCase().replaceAll(" ", "_") ||
             tags.leisure === selectedType.toLowerCase().replaceAll(" ", "_") ||

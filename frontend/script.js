@@ -44,7 +44,7 @@ let kidsActivities = [];
 let entertainmentVenues = [];
 let parkingPlaces = [];
 let services = [];
-let currentPlaces = [];
+let currentPlacesInView = [];
 
 const handleSearch = () => {
   loadingScreen.classList.remove("hidden");
@@ -218,7 +218,7 @@ const handleSearch = () => {
 };
 
 const showPlaces = (placesArray) => {
-  currentPlaces = [...placesArray];
+  currentPlacesInView = [...placesArray]; // set the places currently in view to allow another function filterPlaces to target this specific array and filter it out
 
   const filter = document.getElementById("filter");
 
@@ -283,5 +283,5 @@ homeButton.addEventListener("click", (e) => {
 });
 filter.addEventListener("change", (e) => {
   const selectedType = e.target.value;
-  filterPlaces(selectedType, currentPlaces);
+  filterPlaces(selectedType, currentPlacesInView);
 });
