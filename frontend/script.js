@@ -33,6 +33,7 @@ const lists = document.getElementById("lists");
 const userInputArea = document.getElementById("user-input");
 const listOptions = document.getElementById("list-options");
 const footer = document.getElementById("footer");
+const mapPage = document.getElementById("map-page");
 
 // below initialise the places arrays ready to be populated once search is completed, and then called on depending which event listener is triggered
 
@@ -244,7 +245,7 @@ const showPlaces = (placesArray) => {
 
 searchButton.addEventListener("click", handleSearch);
 backButton.addEventListener("click", (e) => {
-  handleReturn(resultsArea, lists, listOptions);
+  handleReturn(resultsArea, lists, listOptions, mapPage);
 });
 foodButton.addEventListener("click", (e) => {
   showPlaces(foodPlaces);
@@ -278,7 +279,8 @@ homeButton.addEventListener("click", (e) => {
     lists,
     userInputArea,
     searchBox,
-    searchButton
+    searchButton,
+    mapPage
   );
 });
 filter.addEventListener("change", (e) => {

@@ -278,6 +278,13 @@ p {
   padding: 15px;
 }
 
+.list-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
 .list-item-name {
   font-size: 1em;
 }
@@ -349,5 +356,7 @@ p {
 /* leaflet css */
 
 #map {
-  height: 240px;
+  height: 340px;
+  width: 95%;
+  margin: 0 auto;
 }

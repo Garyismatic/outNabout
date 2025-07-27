@@ -64,6 +64,7 @@ export function createList(arrayOfPlaces) {
 
     const imgContainer = newCard.querySelector(".list-item-img");
     const img = document.createElement("img");
+    const mapButton = newCard.querySelector(".map-button");
 
     img.src = `./CSS/icons/${category}.png`; // the icon is inserted dynamically depending on the category
     img.alt = `${place.tags.amenity} icon`;
@@ -79,6 +80,9 @@ export function createList(arrayOfPlaces) {
     newCard.getElementsByTagName("p")[0].textContent = `${street} ${postcode}`;
     newCard.classList.add("flex", "slide");
 
+    mapButton.addEventListener("click", (e) => {
+      getMap(place.lat, place.lon);
+    });
     imgContainer.appendChild(img);
     lists.appendChild(newCard);
   });
@@ -130,7 +134,8 @@ export function returnHome(
   lists,
   userInputArea,
   searchBox,
-  searchButton
+  searchButton,
+  mapPage
 ) {
   listOptions.classList.add("hidden");
   listOptions.classList.remove("flex");
@@ -145,13 +150,42 @@ export function returnHome(
   searchBox[0].value = "";
   searchBox[0].classList.add("fade-in-2");
   searchButton.classList.add("fade-in-3");
+  mapPage.classList.add("hidden");
 }
 
-export function handleReturn(resultsArea, lists, listOptions) {
+export function handleReturn(resultsArea, lists, listOptions, mapPage) {
   resultsArea.classList.add("grid");
   resultsArea.classList.remove("hidden");
   lists.classList.add("hidden");
   lists.classList.remove("grid");
   listOptions.classList.remove("flex");
   listOptions.classList.add("hidden");
+  mapPage.classList.add("hidden");
+}
+
+let map; // variable is listed outside of function so it can be reset if new location chosen
+let currentMarker; // store the current marker so it can be removed and replaced if new or same destination is chosen to avoid duplicate markers or more than one that might confuse the user
+
+export function getMap(latitude, longitude) {
+  const mapPage = document.getElementById("map-page");
+  lists.classList.remove("grid");
+  lists.classList.add("hidden");
+  mapPage.classList.remove("hidden");
+
+  if (map) {
+    map.setView([latitude, longitude], 16);
+    map.removeLayer(currentMarker);
+    currentMarker = L.marker([latitude, longitude]).addTo(map);
+    return;
+  }
+
+  map = L.map("map").setView([latitude, longitude], 16);
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+  currentMarker = L.marker([latitude, longitude]).addTo(map);
 }
